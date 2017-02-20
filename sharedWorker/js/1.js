@@ -1,4 +1,6 @@
-var nickname = sessionStorage.getItem("nickname");
+var nickname = sessionStorage.getItem("nickname"),
+	$message = $("#message"),
+	$sendMsg = $("#sendMsg");
 
 while (!nickname) {
     nickname = prompt("input your nickname,please");
@@ -12,12 +14,25 @@ if (window.SharedWorker) {
         console.log("error: ", err);
     }
 
-
-    myWorker.port.postMessage(nickname);
-    console.log('Message posted to worker');
+    $sendMsg.bind("click", function(event){
+    	var msg = $message.val().trim();
+    	if (!msg){
+    		return;
+    	}
+    	postMessage(msg);
+    });
 
     myWorker.port.onmessage = function(e) {
-        result1.textContent = e.data;
-        console.log('Message received from worker');
+    	var data = e.data;
+        console.log('got message from worker', data);
+    }
+
+    function postMessage(message){
+    	var data = {
+    		nickname: nickname,
+    		message: message
+    	};
+    	myWorker.port.postMessage(data);
+    	console.log("post message to worker");
     }
 }

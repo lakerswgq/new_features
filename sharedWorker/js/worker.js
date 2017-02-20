@@ -5,7 +5,14 @@ onconnect = function(e) {
 
   port.onmessage = function(e) {
     var data = e.data;
-    console.log(data);
+    broadcast(data);
+    console.log("data",data);
   }
 
+}
+
+function broadcast(msg){
+	ports.forEach( function(port, index) {
+		port.postMessage(msg);
+	});
 }
