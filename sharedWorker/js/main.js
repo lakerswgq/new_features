@@ -68,3 +68,6 @@ if (window.SharedWorker) {
 
 
 }
+else {
+    alert("your browser doesn't spport SharedWorker Api");
+}
